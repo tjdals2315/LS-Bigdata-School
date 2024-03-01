@@ -1,0 +1,51 @@
+--Q1
+-- SELECT EMPNO, ENAME FROM EMPTY
+--     REPLEACE
+--문제1
+SELECT EMPNO,
+       RPAD(SUBSTR(EMPNO,1,2),4,'*') AS MASKING_EMPNO,
+       ENAME,
+       RPAD(SUBSTR(ENAME,1,1),LENGTH(ENAME),'*') AS MASKING_ENAME --LENGTH로 자리수 만듦
+    FROM EMP
+   WHERE LENGTH(ENAME) >= 5
+     AND LENGTH(ENAME) < 6;
+
+
+--Q2
+-- 소수점 세번째 자리에서 버리라 -> TRUNK( , 2)/ 두번째 소수점에서 반올림 -> ROUND( ,1)
+-- SELECT 
+--     TRUNC(SAL / 21.5, 3) AS DAY_PAY,
+--     ROUND(SAL/ 21.5 / 8, 2) AS TIME_PAY
+--    FROM EMP;
+SELECT EMPNO, ENAME, SAL,
+       TRUNC(SAL/21.5,2) AS DAY_PAY,
+       ROUND(SAL/21.5/8,1) AS TIME_PAY
+    FROM EMP;
+
+--Q3
+--하나의 항목에 두개 함수 적용시키기 위해서는 어떻게 해야하는지
+-- SELECT EMPNO, ENAME, HIREDATE,JOB, COMM
+--    NEXT_DAY(ADD_MONTHS(HIREDATE, 3)) AS R_JOB, (NEXT_DAY에 요일 빠졌음)
+--    TO_CHAR(HIREDATEM 'YYYY-NN-DD'),
+--    NVL(COMM, 'N/A')
+--   FROM EMP;
+   
+SELECT EMPNO, ENAME, HIREDATE,
+       TO_CHAR(NEXT_DAY(ADD_MONTHS(HIREDATE,3),'월요일'),'YYYY-MM-DD') AS R_JOB,
+       NVL(TO_CHAR(COMM), 'N/A') AS COMM
+    FROM EMP;
+
+--Q4 CASE
+-- 문자로 처리되어야 함
+--문제4
+SELECT EMPNO, ENAME, MGR,
+    CASE
+       WHEN MGR IS NULL THEN '0000'
+       WHEN SUBSTR(MGR,1,2) = '75' THEN '5555'
+       WHEN SUBSTR(MGR,1,2) = '76' THEN '6666'
+       WHEN SUBSTR(MGR,1,2) = '77' THEN '7777'
+       WHEN SUBSTR(MGR,1,2) = '78' THEN '8888'
+       ELSE TO_CHAR(MGR)
+    END AS CHG_MGR
+    FROM EMP;
+--
