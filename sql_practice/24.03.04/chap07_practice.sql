@@ -1,5 +1,3 @@
--- 잊기 전에 한 번 더 정답
-
 -- 7-1
 SELECT DEPTNO,
        TRUNC(AVG(SAL)) AS AVG_SAL,
@@ -8,6 +6,15 @@ SELECT DEPTNO,
        COUNT(*) AS CNT
   FROM EMP
 GROUP BY DEPTNO; 
+
+--FIRST_VERSION
+SELECT DEPTNO, 
+       ROUND(AVG(SAL)) AS AVG_SAL, --소수점을 제외해야함으로 ROUND 보다 TRUNC를 사용해야함
+       MAX(SAL) AS MAX_SAL, 
+       MIN(SAL) AS MIN_SAL, 
+       COUNT(DEPTNO) AS CNT
+    FROM EMP
+GROUP BY DEPTNO;
 
 -- 7-2
 SELECT JOB,
